@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Game</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f8f8;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    #container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #problem {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    #answerInput {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    #submitButton {
+      background-color: #2ecc71;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #submitButton:hover {
+      background-color: #27ae60;
+    }
+
+    #submitButton.wrong {
+      background-color: #e74c3c;
+    }
+
+    #submitButton.correct {
+      background-color: #2ecc71;
+    }
+
+    #score {
+      font-size: 18px;
+      color: #555;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Math Game</h1>
+    <p id="problem">Solve the multiplication:</p>
+    <input type="text" id="answerInput" placeholder="Your answer">
+    <button id="submitButton">Submit</button>
+    <p id="score">Score: 0</p>
+  </div>
+
+  <script>
+    let score = 0;
+
+    function generateProblem() {
+      const num1 = Math.floor(Math.random() * 10) + 1;
+      const num2 = Math.floor(Math.random() * 10) + 1;
+      const problemText = `Solve the multiplication: ${num1} * ${num2}`;
+      const correctAnswer = num1 * num2;
+
+      document.getElementById('problem').textContent = problemText;
+      return correctAnswer;
+    }
+
+    function updateScore() {
+      document.getElementById('score').textContent = `Score: ${score}`;
+    }
+
+    function submitHandler() {
+      const correctAnswer = generateProblem();
+
+      document.getElementById('submitButton').addEventListener('click', function handler() {
+        const userAnswer = parseInt(document.getElementById('answerInput').value, 10);
+
+        if (!isNaN(userAnswer) && userAnswer === correctAnswer) {
+          score += 10; // Increase score for a correct answer
+          updateScore();
+          document.getElementById('submitButton').classList.remove('wrong');
+          document.getElementById('submitButton').classList.add('correct');
+          document.getElementById('submitButton').removeEventListener('click', handler);
+          submitHandler(); // Deliver a new problem
+        } else {
+          // Change the button color to red on a wrong answer
+          document.getElementById('submitButton').classList.remove('correct');
+          document.getElementById('submitButton').classList.add('wrong');
+        }
+
+        // Clear the input for the next problem
+        document.getElementById('answerInput').value = '';
+      });
+    }
+
+    // Initial problem generation
+    submitHandler();
+  </script>
+</body>
+</html>
